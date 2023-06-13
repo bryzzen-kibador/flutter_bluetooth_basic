@@ -118,12 +118,26 @@ public class FlutterBluetoothBasicPlugin implements MethodCallHandler, RequestPe
       case "writeData":
         writeData(result, args);
         break;
+      case "enableDiscoverable":
+        int duration = call.argument("duration");
+        enableDiscoverable(duration);
+        result.success(null);
+        break;
       default:
         result.notImplemented();
         break;
     }
 
   }
+  
+  private void enableDiscoverable(int duration) {
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter != null) {
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+            intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, duration);
+            startActivity(intent);
+        }
+    }
 
   private void getDevices(Result result){
     List<Map<String, Object>> devices = new ArrayList<>();
