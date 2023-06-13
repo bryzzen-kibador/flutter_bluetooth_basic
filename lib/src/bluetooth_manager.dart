@@ -76,6 +76,15 @@ class BluetoothManager {
     // Clear scan results list
     _scanResults.add(<BluetoothDevice>[]);
 
+    try{
+      await _channel.invokeMethod('enableDiscoverable', {'duration': 300});
+    }catch (e) {
+      print('Error starting scan.');
+      _stopScanPill.add(null);
+      _isScanning.add(false);
+      throw e;
+    }
+    
     try {
       await _channel.invokeMethod('startScan');
     } catch (e) {
